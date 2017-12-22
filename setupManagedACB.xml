@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<workflow>
+    <autoTakeOwnership>false</autoTakeOwnership>
+    <workflowInfo>
+        <workflowID scope="none">EnableIMSManagedACBs</workflowID>
+        <workflowDescription>Procedure to enable Managed ACBs on an existing IMS instance.</workflowDescription>
+        <workflowVersion>0.1</workflowVersion>
+        <vendor>IBM</vendor>
+        <Configuration>
+            <productID>5635-A05</productID>
+            <productName>IMS</productName>
+            <productVersion>Version 15</productVersion>
+        </Configuration>
+    </workflowInfo>
+    <variable name="DFS_DFSDF_SUFFIX" scope="instance">
+        <label>A</label>
+        <abstract>Suffix for the DFSDFxxx IMS proclib member</abstract>
+        <description>The DFSDFxxx member of the IMS PROCLIB data set consolidates the specification of processing options for many different IMS components and functions. The CATALOG section defines the IMS catalog for all IMS systems, except those IMS systems for which a CATALOGxxxx section is defined. 
+        <br/>The 3 character length string will be added to the DFSDF name.</description>
+        <category>IMS catalog</category>
+        <string>
+            <minLength>3</minLength>
+            <maxLength>3</maxLength>
+            <default>000</default>
+        </string>
+    </variable>
+    <variable name="DFS_RESLIB_DS" scope="instance" visibility="private">
+        <label>RESLIB data set</label>
+        <abstract>IMS resident library data set</abstract>
+        <description>IMS resident library data set</description>
+        <category>IMS data set</category>
+        <string valueMustBeChoice="false" multiLine="false">
+            <validationType>DSNAME</validationType>
+        </string>
+    </variable>
+    <variable name="DFS_EXITLIB_DS" scope="instance" visibility="private">
+        <label>EXITLIB</label>
+        <abstract>IMS EXITLIB data set</abstract>
+        <description>IMS EXITLIB data set</description>
+        <category>IMS data set</category>
+        <string valueMustBeChoice="false" multiLine="false">
+            <validationType>DSNAME</validationType>
+        </string>
+    </variable>
+    <variable name="DFS_PROCLIB_DS" scope="instance" visibility="private">
+        <label>PROCLIB</label>
+        <abstract>IMS PROCLIB data set</abstract>
+        <description>Contains procedures that are built during system definition</description>
+        <category>IMS data set</category>
+        <string valueMustBeChoice="false" multiLine="false">
+            <validationType>DSNAME</validationType>
+        </string>
+    </variable>
+    <variable name="DFS_CATLOG_DS" scope="instance" visibility="private">
+        <label>CATLOG</label>
+        <abstract>CATLOG data set</abstract>
+        <description>Data set where the log output for the Catalog Populate Utility will be written.</description>
+        <category>IMS data set</category>
+        <string valueMustBeChoice="false" multiLine="false">
+            <validationType>DSNAME</validationType>
+        </string>
+    </variable>
+    <variable name="DFS_INSTALL_DS" scope="instance" visibility="private">
+        <label>INSTALL</label>
+        <abstract>Data set where the install JCLs can be saved</abstract>
+        <description>Data set where the JCLs used in the workflow can be saved.</description>
+        <category>Install data set</category>
+        <string valueMustBeChoice="false" multiLine="false">
+            <validationType>DSNAME</validationType>
+        </string>
+    </variable>
+    <variable name="DFS_JCLPDS_DS" scope="instance" visibility="private">
+        <label>JCLPDS</label>
+        <abstract>Data set where GENJCL are located</abstract>
+        <description>Data set where GENJCL are located</description>
+        <category>IMS data set</category>
+        <string valueMustBeChoice="false" multiLine="false">
+            <validationType>DSNAME</validationType>
+        </string>
+    </variable>
+    <variable name="DFS_DBDLIB_DS" scope="instance" visibility="private">
+        <label>DBDLIB</label>
+        <abstract>Data set containing the database description blocks</abstract>
+        <description>DBDLIB data set contains the database description blocks (DBDs) that are created by the Database Description Generation (DBDGEN) utility</description>
+        <category>IMS database</category>
+        <string valueMustBeChoice="false" multiLine="false">
+            <validationType>DSNAME</validationType>
+        </string>
+    </variable>
+    <variable name="DFS_PSBLIB_DS" scope="instance" visibility="private">
+        <label>PSBLIB</label>
+        <abstract>Data set containing the program specification blocks</abstract>
+        <description>PSBLIB data set contains the program specification blocks (PSBs) created by the Program Specification Block Generation (PSBGEN) utility</description>
+        <category>IMS database</category>
+        <string valueMustBeChoice="false" multiLine="false">
+            <validationType>DSNAME</validationType>
+        </string>
+    </variable>
+    <variable name="DFS_ACBLIB_DS" scope="instance" visibility="private">
+        <label>ACBLIB</label>
+        <abstract>Data set containing the application description and database control blocks</abstract>
+        <description>ACBLIB contains the application control blocks (ACBs) that are created by the Application Control Blocks Maintenance (ACBGEN) utility</description>
+        <category>IMS database</category>
+        <string valueMustBeChoice="false" multiLine="false">
+            <validationType>DSNAME</validationType>
+        </string>
+    </variable>
+    <step name="gatherImsCatalogInfo" optional="false">
+        <title>Specify IMS and catalog information</title>
+        <description>Specify the IMS information needed for enabling Managed ACBs.</description>
+        <variableValue name="DFS_DFSDF_SUFFIX" scope="instance" noPromptIfSet="false" required="true"/>
+        <variableValue name="DFS_DBDLIB_DS" scope="instance" noPromptIfSet="false" required="true"/>
+        <variableValue name="DFS_PSBLIB_DS" scope="instance" noPromptIfSet="false" required="true"/>
+        <variableValue name="DFS_ACBLIB_DS" scope="instance" noPromptIfSet="false" required="true"/>
+        <variableValue name="DFS_RESLIB_DS" scope="instance" noPromptIfSet="false" required="true"/>
+        <variableValue name="DFS_PROCLIB_DS" scope="instance" noPromptIfSet="false" required="true"/>
+        <variableValue name="DFS_EXITLIB_DS" scope="instance" noPromptIfSet="false" required="true"/>
+        <variableValue name="DFS_JCLPDS_DS" scope="instance" noPromptIfSet="false" required="false"/>
+        <variableValue name="DFS_CATLOG_DS" scope="instance" noPromptIfSet="false" required="true"/>
+        <variableValue name="DFS_INSTALL_DS" scope="instance" noPromptIfSet="false" required="true"/>
+        <instructions substitution="true">&lt;p&gt;This step allows you to specify the data that will be used to setup IMS managed ACBs. In some instances default values are provided.&lt;/p&gt;
+
+Keep in mind that once entered the information will be used by all the subsequent steps.
+&lt;p&gt;
+The environment created by this script is intended to be representative of IMS managed ACBs on an existing IMS instance.&lt;br&gt;&lt;/br&gt;
+
+Prior to running this workflow you should stop IMS. &lt;br&gt;&lt;/br&gt;
+
+You might want to verify that the deployment of the catalog was successful after all the steps are completed. &lt;/p&gt;
+&lt;b&gt;Environment&lt;/b&gt;
+&lt;ul&gt;
+&lt;li&gt;The DFSDFxxx proclib member will be: DFSDF${instance-DFS_DFSDF_SUFFIX} &lt;/li&gt;
+
+&lt;li&gt;Data set for the DBDLIB: ${instance-DFS_DBDLIB_DS} &lt;/li&gt;
+&lt;li&gt;Data set for the PSBLIB: ${instance-DFS_PSBLIB_DS} &lt;/li&gt;
+&lt;li&gt;Data set for the ACBLIB: ${instance-DFS_ACBLIB_DS}&lt;/li&gt;
+
+&lt;li&gt;Data set for the EXITLIB: ${instance-DFS_EXITLIB_DS}&lt;/li&gt;
+
+&lt;li&gt;Data set for the PROCLIB:  ${instance-DFS_PROCLIB_DS} &lt;/li&gt;
+&lt;li&gt;Data set for the resident library (RESLIB):  ${instance-DFS_RESLIB_DS} &lt;/li&gt;
+&lt;li&gt;Data set for the JCLPDS: ${instance-DFS_JCLPDS_DS}&lt;/li&gt;
+&lt;li&gt;Data set for the CATLOG:  ${instance-DFS_CATLOG_DS}&lt;/li&gt;
+
+&lt;li&gt;Data set for saving the install JCL: ${instance-DFS_INSTALL_DS}&lt;/li&gt;
+
+&lt;/ul&gt;</instructions>
+        <weight>1</weight>
+        <skills>System Programmer</skills>
+        <autoEnable>true</autoEnable>
+        <canMarkAsFailed>false</canMarkAsFailed>
+    </step>
+    <step name="allocateWorkingDataSet" optional="true">
+        <title>Create data set for saving catalog JCLs</title>
+        <description>Create data set for saving catalog JCLs</description>
+        <prereqStep name="gatherImsCatalogInfo"/>
+        <instructions substitution="true">
+            <p>This step will create a partitioned data set where the JCLs used in this workflow can be saved.<br/> 
+	- Install JCLs:  ${instance-DFS_INSTALL_DS}<br/> 
+    <b>NOTE: If a data set has been already allocated the process will be skipped and a "NOT EXECUTED" message will be reported to the associated step.</b>
+ </p>
+        </instructions>
+        <weight>5</weight>
+        <skills>System Programmer</skills>
+        <autoEnable>true</autoEnable>
+        <canMarkAsFailed>false</canMarkAsFailed>
+        <template>
+            <inlineTemplate substitution="true">//*
+//* CHECK FOR WORKLIB EXISTANCE
+//*
+//LSTDS1  EXEC PGM=IDCAMS
+//SYSPRINT DD SYSOUT=A
+//SYSIN    DD *
+     LISTCAT ENT('${instance-DFS_INSTALL_DS}')
+//*
+//* ALLOCATE JOBS DATA SET IF NOT THERE
+//*
+//ALLCWRK EXEC PGM=IEFBR14,COND=(0,EQ,LSTDS1)   
+//SYSUT2   DD  DISP=(NEW,CATLG),SPACE=(CYL,(10,10,5)),
+//         DSN=${instance-DFS_INSTALL_DS},
+//*         STORCLAS=MFI,
+//         DCB=(LRECL=80,RECFM=FB,BLKSIZE=27920,DSORG=PO)
+//*</inlineTemplate>
+            <submitAs maxRc="4">JCL</submitAs>
+            <maxLrecl>80</maxLrecl>
+        </template>
+    </step>
+    <step name="createDfsdfxxxMembers" optional="false">
+        <title>Create DFSDFxxx proclib members for updating and running catalog with managed ACBs</title>
+        <description>Create DFSDFxxx proclib members for updating and running catalog with managed ACBs</description>
+        <instructions substitution="true">This step creates two IMS proclib members.  
+        <ol>
+        	<li>DFSDFLOD member is created to be used for updating the IMS catalog and creating the IMS directory data sets. In the CATALOG section CATALOG=Y and ACBMGMT=ACBLIB.</li>
+        	<li>DFSDF${instance-DFS_DFSDF_SUFFIX} member is created for using IMS catalog with managed ACBs.  In the CATALOG section CATALOG=Y and ACBMGMT=CATALOG.</li>
+        </ol>
+        Copy the contents of the DFSDF${instance-DFS_DFSDF_SUFFIX} data set to an existing DFSDFxxx member, or use this member as is.  <br/>
+        Specify the execution parameters for DFSDF=xxx in the DFSPBxxx PROCLIB member.  The 3 character value should correspond to the name of the DFSDF${instance-DFS_DFSDF_SUFFIX} member which indicates CATALOG=Y<br/>
+        If the DFSDF${instance-DFS_DFSDF_SUFFIX} member is already existing in the ${instance-DFS_PROCLIB_DS} data set it will not be overwritten.
+        
+</instructions>
+        <weight>10</weight>
+        <skills>System Programmer</skills>
+        <autoEnable>true</autoEnable>
+        <canMarkAsFailed>false</canMarkAsFailed>
+        <template>
+            <inlineTemplate substitution="true">//PROCUPDT PROC MBR=TEMPNAME
+//*
+//P        EXEC PGM=IEBGENER
+//SYSPRINT DD SYSOUT=*
+//SYSUT2   DD DISP=SHR,
+//            DSN=${instance-DFS_PROCLIB_DS}(&amp;MBR)
+//SYSIN    DD DUMMY
+//        PEND
+//***************************************************************
+//*
+//* THE FOLLOWING STEP ADDS THE DFSVSMHP MEMBER TO IMS PROCLIB.
+//* THIS MEMBER IS CREATED TO SUPPORT CATALOG.
+//*
+//DFSVSMHP EXEC PROC=PROCUPDT,MBR=DFSVSMHP
+//P.SYSUT1 DD *
+24576,50
+16384,50
+8192,50
+4096,50
+2048,50
+1024,50
+512,50
+IOBF=(2048,50,N,N)
+IOBF=(4096,500,N,N)
+IOBF=(6144,50,N,N)
+IOBF=(8192,50,N,N)
+IOBF=(24576,50,N,N)
+LOCKTIME=30
+OLDSDEF OLDS=(00,01,02,03),MODE=SINGLE,BUFNO=20
+WADSDEF WADS=(0,1)
+OPTIONS,DLOG=ON,SCHD=ON,LATC=LOW,STRG=ON,DUMP=YES
+OPTIONS,DISP=LOW,LOCK=OUTHIGH,DL/I=OUTHIGH
+ARCHDEF MEMBER(ARC1JCL) ALL
+/*
+//*
+//* THE FOLLOWING STEP ADDS THE DFSDF${instance-DFS_DFSDF_SUFFIX} MEMBER TO IMS PROCLIB.
+//* THIS MEMBER IS CREATED TO SUPPORT MANAGED ACBS WITH CATALOG
+//*
+//DFSDF${instance-DFS_DFSDF_SUFFIX} EXEC PROC=PROCUPDT,MBR=DFSDF${instance-DFS_DFSDF_SUFFIX}
+//P.SYSUT1 DD *
+&lt;SECTION=CATALOG&gt;
+CATALOG=Y
+ALIAS=DFSC
+RETENTION=(DAYS=40,VERSIONS=55)
+ACBMGMT=CATALOG
+*
+//* THE FOLLOWING STEP ADDS THE DFSDFLOD MEMBER TO IMS PROCLIB.
+//* THIS MEMBER IS CREATED TO SUPPORT CATALOG.
+//*
+//DFSDFLOD EXEC PROC=PROCUPDT,MBR=DFSDFLOD
+//P.SYSUT1 DD *
+&lt;SECTION=CATALOG&gt;
+CATALOG=Y
+ALIAS=DFSC
+RETENTION=(DAYS=40,VERSIONS=55)
+ACBMGMT=ACBLIB
+*--------------------------------------------------------------------*
+* END OF MEMBER DFSDLOAD                                             *
+*--------------------------------------------------------------------*
+//*</inlineTemplate>
+            <submitAs maxRc="0">JCL</submitAs>
+            <maxLrecl>80</maxLrecl>
+            <saveAsDataset substitution="true">${instance-DFS_INSTALL_DS}(CREDFSDF)</saveAsDataset>
+        </template>
+    </step>
+    <step name="updateCatalogDB" optional="false">
+        <title>Update IMS catalog database and create IMS directory data sets</title>
+        <description>Update the IMS catalog database by running the IMS Catalog Populate utility (DFS3PU00) with DFSCP001. DFS3PU00 will execute with MANAGEDACBS=SETUP.</description>
+        <prereqStep name="createDfsdfxxxMembers"/>
+        <instructions substitution="true">This step updates the IMS catalog database if needed and creates the IMS directory data sets. It also then adds the ACBs to the directory.</instructions>
+        <weight>10</weight>
+        <skills>System Programmer</skills>
+        <autoEnable>true</autoEnable>
+        <canMarkAsFailed>false</canMarkAsFailed>
+        <template>
+            <inlineTemplate substitution="true">//ZCLUDPRC JCLLIB ORDER=(${instance-DFS_PROCLIB_DS})
+//CATLOAD EXEC PGM=DFS3PU00,
+//  PARM=(DLI,DFS3PU00,DFSCP001,,,,,,,,,,,Y,N,,,,,,,,,,,,'DFSDF=LOD')
+//*
+//DFSRESLB DD DSN=${instance-DFS_RESLIB_DS},DISP=SHR
+//STEPLIB  DD DSN=${instance-DFS_EXITLIB_DS},DISP=SHR
+//         DD DSN=${instance-DFS_RESLIB_DS},DISP=SHR
+//PROCLIB  DD DSN=${instance-DFS_PROCLIB_DS},DISP=SHR
+//IMS      DD DSN=${instance-DFS_DBDLIB_DS},DISP=SHR
+//         DD DSN=${instance-DFS_PSBLIB_DS},DISP=SHR
+//IEFRDER  DD DSN=${instance-DFS_CATLOG_DS},DISP=(NEW,DELETE),
+//            DCB=(RECFM=VB,LRECL=4092,BLKSIZE=4096,BUFNO=5),
+//            SPACE=(CYL,(100,75)),UNIT=SYSDA
+//DFSVSAMP DD DSN=${instance-DFS_PROCLIB_DS}(DFSVSMHP),DISP=SHR
+//SYSPRINT DD  SYSOUT=*
+//SYSABEND DD  SYSOUT=*
+//IMSACB01 DD  DSN=${instance-DFS_ACBLIB_DS},DISP=SHR
+//ACBCATWK DD  DUMMY
+//SYSINP   DD  *
+DUPLIST
+ISRTLIST
+MANAGEDACBS=SETUP
+//*
+/*</inlineTemplate>
+            <submitAs maxRc="0">JCL</submitAs>
+            <maxLrecl>80</maxLrecl>
+            <saveAsDataset substitution="true">${instance-DFS_INSTALL_DS}(CATLOAD)</saveAsDataset>
+        </template>
+    </step>
+    <step name="imageCopy" optional="true">
+        <title>Take an image copy of HALDB catalog data sets</title>
+        <description>Take an image copy of HALDB catalog data sets</description>
+        <prereqStep name="gatherImsCatalogInfo"/>
+        <instructions substitution="true">This step will take an image copy of the catalog data sets using the Database Recovery Control utility (DSPURX00). <br/>
+        It will use the ICJCL in the ${instance-DFS_JCLPDS_DS} data set to generate a JCL for taking the image copy.<br/>
+        The JCL will use the job card from the default JOBJCL in the the ${instance-DFS_JCLPDS_DS} data set.  
+        <br/>
+        You can also specify JOB(<i>member</i>) as part of the SYSIN GENJCL statement and the specified execution <i>member</i> will be used to produce the job statement.
+        <br/>
+        The output of the image copy can be found in the SDSF status of jobs. 
+        For more information on GENJCL see <a href="https://www.ibm.com/support/knowledgecenter/en/SSEPH2_14.1.0/com.ibm.ims14.doc.cr/compcmds/ims_genjclic.htm">GENJCL.IC</a>
+        <p>For more information on database recovery see <a href="https://www.ibm.com/support/knowledgecenter/en/SSEPH2_14.1.0/com.ibm.ims14.doc.sur/ims_dspurx00.htm">Database Recovery Control utility (DSPURX00)</a>
+            </p>
+        This step is optional and can be skipped.               
+        </instructions>
+        <weight>10</weight>
+        <skills>System Programmer</skills>
+        <autoEnable>true</autoEnable>
+        <canMarkAsFailed>false</canMarkAsFailed>
+        <template>
+            <inlineTemplate substitution="true">//ZCLUDPRC JCLLIB ORDER=(${instance-DFS_PROCLIB_DS})
+//S1 EXEC PGM=DSPURX00,REGION=6M
+//DFSRESLB DD DSN=${instance-DFS_RESLIB_DS},DISP=SHR
+//STEPLIB  DD DSN=${instance-DFS_EXITLIB_DS},DISP=SHR
+//         DD DSN=${instance-DFS_RESLIB_DS},DISP=SHR
+//PROCLIB  DD DSN=${instance-DFS_PROCLIB_DS},DISP=SHR
+//SYSPRINT DD SYSOUT=*
+//JCLPDS   DD DSN=${instance-DFS_JCLPDS_DS},DISP=SHR
+//JCLOUT   DD SYSOUT=(*,INTRDR)
+//IMS      DD DSN=${instance-DFS_DBDLIB_DS},DISP=SHR
+//         DD DSN=${instance-DFS_PSBLIB_DS},DISP=SHR
+//SYSIN DD *
+     GENJCL.IC DBD(DFSCD000) LIST ONEJOB
+     GENJCL.IC DBD(DFSCX000) LIST ONEJOB
+//*
+/*</inlineTemplate>
+            <submitAs maxRc="4">JCL</submitAs>
+            <maxLrecl>80</maxLrecl>
+            <saveAsDataset substitution="true">${instance-DFS_INSTALL_DS}(IMGCOPY)</saveAsDataset>
+        </template>
+    </step>
+</workflow>
