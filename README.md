@@ -1,4 +1,4 @@
-# Setup IMS managed ACBs
+# Set up IMS managed ACBs
 
 ## Overview
 
