@@ -23,8 +23,8 @@ As an optional step, the workflow can also create an image copy of the HALDB cat
 
 ## Security requirements  
 To run the workflow, you need the following authority:
-* RACF READ authority on SMP/E installed IMS libraries.
-* RACF UPDATE authority on the high level qualifiers (HLQs) you are using for the IMS instance libraries.
+* RACF READ authority on SMP/E-installed IMS libraries.
+* RACF UPDATE authority on the high-level qualifiers (HLQs) you are using for the IMS instance libraries.
 * Authority to ADD or DELETE APF authorizations.
 
 ## Package structure  
