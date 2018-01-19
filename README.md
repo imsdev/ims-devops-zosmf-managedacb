@@ -51,7 +51,7 @@ The repository includes the following files:
 1. Select **Workflows** from the left menu.
 1. Select the **Actions** drop down menu.
 1. Select **Create Workflow**.
-1. In the Create Workflow dialog, specify:
+1. In the Create Workflow dialog, specify the following information:
     *	Workflow definition file
     *	Workflow variable input file
     *	System
