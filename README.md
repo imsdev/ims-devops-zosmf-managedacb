@@ -38,13 +38,13 @@ The repository includes the following files:
 * FTP the setUpManagedACB.xml workflow and the workflow_variables.properties file to USS on the z/OS host in binary mode.
 * Make these files visible to the z/OSMF application.  Do this by changing the access permissions of the files using the chmod command.
   * Example chmod commands: 
-```Java
-chmod 755 setUpManagedACB.xml
-```
-* Or if the file is in a folder with the name of workflows:
-```Java 
-chmod -R 755 workflows
-```
+    ```Java
+    chmod 755 setUpManagedACB.xml
+    ```
+  * Or if the file is in a folder with the name of workflows:
+    ```Java 
+    chmod -R 755 workflows
+    ```
 
 ## Steps to run the workflow using the z/OSMF web interface
 1. Log into the IBM z/OS Management Facility web interface.
