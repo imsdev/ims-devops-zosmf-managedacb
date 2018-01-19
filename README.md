@@ -2,7 +2,7 @@
 
 ## Overview
 
-You can rapidly enable [IMS™ management of application control blocks](https://www.ibm.com/support/knowledgecenter/en/SSEPH2_14.1.0/com.ibm.ims14.doc.sdg/ims_catalog_acb_mgmt_enabling_catg_exists.htm) (ACBs) by using the IBM® z/OS® Management Facility (z/OSMF) with this z/OSMF workflow example.
+You can rapidly enable [IMS™ management of application control blocks](https://www.ibm.com/support/knowledgecenter/en/SSEPH2_14.1.0/com.ibm.ims14.doc.sdg/ims_catalog_acb_mgmt_enabling_catg_exists.htm) (ACBs) by using the IBM® z/OS® Management Facility (z/OSMF) with this z/OSMF workflow sample.
 
 IMS can manage the runtime ACBs for databases and program views for you. When IMS manages ACBs, IMS no longer requires DBD, PSB, and ACB libraries.
 
