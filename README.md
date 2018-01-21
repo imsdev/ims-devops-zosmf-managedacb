@@ -35,7 +35,7 @@ The repository includes the following files:
   * This properties file contains values for the variables referenced in the setUpManagedACB.xml workflow. Edit the workflow_variables.properties file to specify the system specific information for the variables in the file. 
 
 ## Installation  
-* FTP the setUpManagedACB.xml workflow and the workflow_variables.properties file to USS on the z/OS host in binary mode.
+* Use FTP to transfer the setUpManagedACB.xml workflow and the workflow_variables.properties file to USS on the z/OS host in binary mode.
 * Make these files visible to the z/OSMF application.  Do this by changing the access permissions of the files using the chmod command.
   * Example chmod commands: 
     ```Java
