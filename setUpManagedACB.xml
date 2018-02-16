@@ -203,21 +203,17 @@ You might want to verify that the deployment of the catalog was successful after
         <autoEnable>true</autoEnable>
         <canMarkAsFailed>false</canMarkAsFailed>
         <template>
-            <inlineTemplate substitution="true">//PROCUPDT PROC MBR=TEMPNAME
-//*
-//P        EXEC PGM=IEBGENER
-//SYSPRINT DD SYSOUT=*
-//SYSUT2   DD DISP=SHR,
-//            DSN=${instance-DFS_PROCLIB_DS}(&amp;MBR)
-//SYSIN    DD DUMMY
-//        PEND
-//***************************************************************
+            <inlineTemplate substitution="true">//***************************************************************
 //*
 //* THE FOLLOWING STEP ADDS THE DFSVSMHP MEMBER TO IMS PROCLIB.
 //* THIS MEMBER IS CREATED TO SUPPORT CATALOG.
 //*
-//DFSVSMHP EXEC PROC=PROCUPDT,MBR=DFSVSMHP
-//P.SYSUT1 DD *
+//DFSVSMHP EXEC PGM=IEBUPDTE,PARM=MOD
+//SYSPRINT DD   SYSOUT=*
+//SYSUT1   DD   DSNAME=${instance-DFS_PROCLIB_DS},DISP=SHR
+//SYSUT2   DD   DSNAME=${instance-DFS_PROCLIB_DS},DISP=SHR
+//SYSIN    DD   DATA
+./        ADD   NAME=DFSVSMHP,LEVEL=00,SOURCE=0,LIST=ALL
 24576,50
 16384,50
 8192,50
@@ -241,29 +237,36 @@ ARCHDEF MEMBER(ARC1JCL) ALL
 //* THE FOLLOWING STEP ADDS THE DFSDF${instance-DFS_DFSDF_SUFFIX} MEMBER TO IMS PROCLIB.
 //* THIS MEMBER IS CREATED TO SUPPORT MANAGED ACBS WITH CATALOG
 //*
-//DFSDF${instance-DFS_DFSDF_SUFFIX} EXEC PROC=PROCUPDT,MBR=DFSDF${instance-DFS_DFSDF_SUFFIX}
-//P.SYSUT1 DD *
+//DFSDF${instance-DFS_DFSDF_SUFFIX} EXEC PGM=IEBUPDTE,PARM=MOD
+//SYSPRINT DD   SYSOUT=*
+//SYSUT1   DD   DSNAME=${instance-DFS_PROCLIB_DS},DISP=SHR
+//SYSUT2   DD   DSNAME=${instance-DFS_PROCLIB_DS},DISP=SHR
+//SYSIN    DD   DATA
+./        ADD   NAME=DFSDF${instance-DFS_DFSDF_SUFFIX},LEVEL=00,SOURCE=0,LIST=ALL
 &lt;SECTION=CATALOG&gt;
 CATALOG=Y
 ALIAS=DFSC
 RETENTION=(DAYS=40,VERSIONS=55)
 ACBMGMT=CATALOG
 *
+/*
 //* THE FOLLOWING STEP ADDS THE DFSDFLOD MEMBER TO IMS PROCLIB.
 //* THIS MEMBER IS CREATED TO SUPPORT CATALOG.
 //*
-//DFSDFLOD EXEC PROC=PROCUPDT,MBR=DFSDFLOD
-//P.SYSUT1 DD *
+//DFSDFLOD EXEC PGM=IEBUPDTE,PARM=MOD
+//SYSPRINT DD   SYSOUT=*
+//SYSUT1   DD   DSNAME=${instance-DFS_PROCLIB_DS},DISP=SHR
+//SYSUT2   DD   DSNAME=${instance-DFS_PROCLIB_DS},DISP=SHR
+//SYSIN    DD   DATA
+./        ADD   NAME=DFSDFLOD,LEVEL=00,SOURCE=0,LIST=ALL
 &lt;SECTION=CATALOG&gt;
 CATALOG=Y
 ALIAS=DFSC
 RETENTION=(DAYS=40,VERSIONS=55)
 ACBMGMT=ACBLIB
-*--------------------------------------------------------------------*
-* END OF MEMBER DFSDLOAD                                             *
-*--------------------------------------------------------------------*
+/*
 //*</inlineTemplate>
-            <submitAs maxRc="0">JCL</submitAs>
+            <submitAs maxRc="4">JCL</submitAs>
             <maxLrecl>80</maxLrecl>
             <saveAsDataset substitution="true">${instance-DFS_INSTALL_DS}(CREDFSDF)</saveAsDataset>
         </template>
